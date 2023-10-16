@@ -1,21 +1,13 @@
 # PersistentQueue
 
-**TODO: Add description**
+Queue with pluggable persistence implementation to handle overflows for critical data
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `persistent_queue` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:persistent_queue, "~> 0.1.0"}
+    {:persistent_queue, github: "fanatics-live/persistent_queue"}
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/persistent_queue>.
-
