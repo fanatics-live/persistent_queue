@@ -159,4 +159,25 @@ defmodule PersistentQueue do
         {{:value, entry}, %{queue | ins: ins, outs: outs, size: size - 1, storage: storage}}
     end
   end
+
+  @doc """
+  Converts queue to list, where the first entry is the head entry
+
+  ## Example:
+
+      iex> queue = new(limit: 4, storage: %PersistentQueue.DroppingStorage{})
+      iex> queue =
+      ...>   queue
+      ...>   |> enqueue(1)
+      ...>   |> enqueue(2)
+      ...>   |> enqueue(3)
+      iex> to_list(queue)
+      [1, 2, 3]
+  """
+  @spec to_list(t(entry)) :: [entry]
+        when entry: term()
+  def to_list(queue) do
+    {entries, _} = dequeue_n(queue, queue.size)
+    entries
+  end
 end
