@@ -1,0 +1,56 @@
+name: CI Workflow
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Restore dependencies and _build
+      uses: actions/cache/restore@v3
+      continue-on-error: true
+      with:
+        key: mix-${{  hashFiles('mix.lock') }}
+        path: |
+          _build
+          deps
+        restore-keys: |
+          mix-${{  hashFiles('mix.lock') }}
+          mix-
+
+    - name: Download and compile dependencies
+      run: |
+        mix deps.get
+        mix deps.compile
+
+    - name: Check formatting
+      run: |
+        mix format --check-formatted
+
+    - name: Compile
+      run: |
+        mix compile --warnings-as-errors
+
+    - name: Lint
+      run: |
+        mix credo --strict
+
+    - name: Cache dependencies and _build
+      continue-on-error: true
+      uses: actions/cache/save@v3
+      with:
+        key: mix-${{  hashFiles('mix.lock') }}
+        path: |
+          _build
+          deps
+
+    - name: Run tests
+      run: |
+        mix test --warnings-as-errors
